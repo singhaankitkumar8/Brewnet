@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Settings - BrewNet</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Privacy Page Specific Styles */
+        .privacy-container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .privacy-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            color: #2c3e50;
+        }
+
+        .privacy-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .privacy-header p {
+            font-size: 1.1rem;
+            color: #7f8c8d;
+        }
+
+        .privacy-content {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .privacy-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .privacy-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .privacy-card-header {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, #8a2be2 0%, #9932cc 100%);
+            color: white;
+        }
+
+        .privacy-card-header i {
+            font-size: 1.5rem;
+            margin-right: 1rem;
+        }
+
+        .privacy-card-header h2 {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .privacy-card-body {
+            padding: 1.5rem;
+        }
+
+        .privacy-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+
+        .privacy-option:last-child {
+            border-bottom: none;
+        }
+
+        .option-info h3 {
+            margin: 0 0 0.3rem 0;
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+
+        .option-info p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        /* Switch Styles */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background: linear-gradient(135deg, #8a2be2 0%, #9932cc 100%);
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #8a2be2;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        /* Range Slider Styles */
+        .slider-container {
+            display: flex;
+            align-items: center;
+            margin-top: 0.8rem;
+        }
+.slider-container input[type="range"] {
+            flex-grow: 1;
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: #ddd;
+            outline: none;
+            margin-right: 1rem;
+        }
+
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8a2be2 0%, #9932cc 100%);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .slider-container input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        #radius-display {
+            font-weight: 600;
+            color: #8a2be2;
+            min-width: 50px;
+            text-align: right;
+        }
+
+        /* Button Styles */
+        .privacy-actions {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.8rem 1.8rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #8a2be2 0%, #9932cc 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #8a2be2;
+            color: #8a2be2;
+        }
+
+        .btn-outline:hover {
+            background: rgba(138, 43, 226, 0.1);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            animation: slideDown 0.4s ease;
+        }
+
+        .close-modal {
+            position: absolute;
+            right: 25px;
+            top: 20px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.2s ease;
+        }
+
+        .close-modal:hover {
+            color: #333;
+            transform: scale(1.2);
+        }
+
+        .blocked-list {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 1.5rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 0;
+            color: #7f8c8d;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #bdc3c7;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .privacy-option {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .switch {
+                margin-top: 1rem;
+                align-self: flex-end;
+            }
+
+            .privacy-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+@keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated background elements -->
+    <div class="bg-animation">
+        <div class="circle x1"></div>
+        <div class="circle x2"></div>
+        <div class="circle x3"></div>
+        <div class="circle x4"></div>
+    </div>
+
+    <header class="header">
+        <div class="container">
+            <div class="logo" onclick="pulseAnimation(this)">
+                <span>Brew</span><span>Net</span>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li><a href="discover.html" class="nav-link">Discover</a></li>
+                    <li><a href="connections.html" class="nav-link">Connections</a></li>
+                    <li><a href="profile.html" class="nav-link">Profile</a></li>
+                    <li><a href="privacy.html" class="active nav-link">Privacy</a></li>
+                </ul>
+            </nav>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="privacy-container">
+            <div class="privacy-header slide-in-down">
+                <h1>Privacy Settings</h1>
+                <p>Control how others see and interact with you on BrewNet</p>
+            </div>
+
+            <div class="privacy-content">
+                <div class="privacy-card fade-in">
+                    <div class="privacy-card-header">
+                        <i class="fas fa-eye"></i>
+                        <h2>Profile Visibility</h2>
+                    </div>
+                    <div class="privacy-card-body">
+                        <div class="privacy-option">
+                            <div class="option-info">
+                                <h3>Discoverability</h3>
+                                <p>Allow your profile to appear in discovery results</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="discoverability" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="privacy-option">
+                            <div class="option-info">
+                                <h3>Show Profile in Searches</h3>
+                                <p>Allow your profile to appear when others search for your interests</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="search-visibility" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+<div class="privacy-card slide-in-left">
+                    <div class="privacy-card-header">
+                        <i class="fas fa-map-marked-alt"></i>
+                        <h2>Location Settings</h2>
+                    </div>
+                    <div class="privacy-card-body">
+                        <div class="privacy-option">
+                            <div class="option-info">
+                                <h3>Discovery Radius</h3>
+                                <p>Set how far away users can discover you (in kilometers)</p>
+                                <div class="slider-container">
+                                    <input type="range" min="1" max="20" value="5" class="slider" id="discovery-radius">
+                                    <span id="radius-display">5 km</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="privacy-option">
+                            <div class="option-info">
+                                <h3>Show Exact Distance</h3>
+                                <p>Allow others to see how far away you are</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="show-distance" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="privacy-option">
+                            <div class="option-info">
+                                <h3>Show Location on Profile</h3>
+                                <p>Display your general location (city/neighborhood) on your profile</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="show-location" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+<div class="privacy-card slide-in-right">
+                    <div class="privacy-card-header">
+                        <i class="fas fa-user-secret"></i>
+                        <h2>Privacy Options</h2>
+                    </div>
+                    <div class="privacy-card-body">
+                        <div class="privacy-option">
+                            <div class="option-info">
+                                <h3>Browse Anonymously</h3>
+                                <p>Your name won't be shown until you accept a connection request</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="anonymous-browsing">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="privacy-option">
+                            <div class="option-info">
+                                <h3>Show My Interests</h3>
+                                <p>Allow others to see your listed interests</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="show-interests" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="privacy-option">
+                            <div class="option-info">
+                                <h3>Connection Approvals</h3>
+                                <p>Require your approval before anyone can message you</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="connection-approval" checked>
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="privacy-card fade-in">
+                    <div class="privacy-card-header">
+                        <i class="fas fa-shield-alt"></i>
+                        <h2>Safety Features</h2>
+                    </div>
+                    <div class="privacy-card-body">
+                        <div class="privacy-option">
+                            <div class="option-info">
+                                <h3>Blocked Users</h3>
+                                <p>Manage users you've blocked from contacting you</p>
+                            </div>
+                            <button class="btn btn-outline" id="manage-blocked">Manage</button>
+                        </div>
+                        <div class="privacy-option">
+                            <div class="option-info">
+                                <h3>Report a User</h3>
+                                <p>Report inappropriate behavior or content</p>
+                            </div>
+                            <button class="btn btn-outline" id="report-user">Report</button>
+                        </div>
+                        <div class="privacy-option">
+                            <div class="option-info">
+                                <h3>Data Privacy</h3>
+                                <p>View and manage your data privacy settings</p>
+                            </div>
+                            <button class="btn btn-outline" id="data-privacy">Manage</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="privacy-actions">
+                    <button class="btn btn-primary" id="save-privacy">Save Changes</button>
+                    <button class="btn btn-outline" id="reset-privacy">Reset to Default</button>
+                </div>
+            </div>
+        </div>
+    </main>
+<!-- Blocked Users Modal -->
+    <div id="blocked-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeBlockedModal()">&times;</span>
+            <h2>Blocked Users</h2>
+            <div class="blocked-list">
+                <!-- Blocked users will be dynamically inserted here -->
+                <div class="empty-state">
+                    <i class="fas fa-user-slash"></i>
+                    <p>You haven't blocked any users yet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/privacy.js"></script>
+    <script>
+        // Privacy Page Interactive Elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Range slider update display
+            const radiusSlider = document.getElementById('discovery-radius');
+            const radiusDisplay = document.getElementById('radius-display');
+            
+            radiusSlider.addEventListener('input', function() {
+                radiusDisplay.textContent = this.value + ' km';
+            });
+
+            // Modal controls
+            const blockedModal = document.getElementById('blocked-modal');
+            const manageBlockedBtn = document.getElementById('manage-blocked');
+            
+            manageBlockedBtn.addEventListener('click', function() {
+                blockedModal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            });
+
+            window.closeBlockedModal = function() {
+                blockedModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            };
+
+            // Close modal when clicking outside
+            window.addEventListener('click', function(event) {
+                if (event.target === blockedModal) {
+                    closeBlockedModal();
+                }
+            });
+
+            // Save button animation
+            const saveBtn = document.getElementById('save-privacy');
+            saveBtn.addEventListener('click', function() {
+                this.innerHTML = '<i class="fas fa-check"></i> Changes Saved';
+                this.classList.add('saved');
+                setTimeout(() => {
+                    this.innerHTML = 'Save Changes';
+                    this.classList.remove('saved');
+                }, 2000);
+            });
+
+            // Reset button confirmation
+            const resetBtn = document.getElementById('reset-privacy');
+            resetBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to reset all privacy settings to default?')) {
+                    // Reset all toggles to default
+                    document.getElementById('discoverability').checked = true;
+                    document.getElementById('search-visibility').checked = true;
+                    document.getElementById('show-distance').checked = true;
+                    document.getElementById('show-location').checked = true;
+                    document.getElementById('anonymous-browsing').checked = false;
+                    document.getElementById('show-interests').checked = true;
+                    document.getElementById('connection-approval').checked = true;
+                    document.getElementById('discovery-radius').value = 5;
+                    radiusDisplay.textContent = '5 km';
+                    
+                    // Show confirmation
+                    const originalText = this.textContent;
+                    this.innerHTML = '<i class="fas fa-check"></i> Reset Complete';
+                    setTimeout(() => {
+                        this.textContent = originalText;
+                    }, 2000);
+                }
+            });
+
+            // Report button action
+            document.getElementById('report-user').addEventListener('click', function() {
+                alert('Please email us at safety@brewnet.com to report a user or inappropriate content.');
+            });
+// Data privacy button action
+            document.getElementById('data-privacy').addEventListener('click', function() {
+                alert('Our data privacy center is coming soon. Check back later for more control over your data.');
+            });
+        });
+    </script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy - BrewNet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Base Styles */
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #3f37c9;
+            --accent: #4895ef;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header Styles - Simplified to match image */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 15px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 25px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+        }
+        
+        nav ul li a.active {
+            color: var(--primary);
+        }
+        
+        /* Main Content */
+        .privacy-container {
+            padding: 100px 0 50px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .privacy-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .privacy-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .privacy-header p {
+            font-size: 1.1rem;
+            color: var(--gray);
+        }
+        
+        /* Privacy Cards */
+        .privacy-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .privacy-card h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .privacy-card h2 i {
+            font-size: 1.3rem;
+        }
+        
+        .privacy-option {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .privacy-option:last-child {
+            border-bottom: none;
+        }
+        
+        .option-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .option-info p {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        /* Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary);
+        }
+        
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--primary);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        /* Range Slider */
+        .range-container {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .range-container input[type="range"] {
+            flex-grow: 1;
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: #ddd;
+            outline: none;
+            margin-right: 15px;
+        }
+        
+        .range-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .range-value {
+            font-weight: 600;
+            color: var(--primary);
+            min-width: 50px;
+        }
+        
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(67, 97, 238, 0.05);
+        }
+        
+        .privacy-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .privacy-container {
+                padding: 80px 0 30px;
+            }
+            
+            .privacy-option {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .switch {
+                margin-top: 10px;
+                align-self: flex-end;
+            }
+            
+            .privacy-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0 10px 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">BrewNet</div>
+            
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="discover.html">Discover</a></li>
+                    <li><a href="connections.html">Connections</a></li>
+                    <li><a href="profile.html">Profile</a></li>
+                    <li><a href="privacy.html" class="active">Privacy</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="privacy-container">
+        <div class="container">
+            <div class="privacy-header">
+<h1>Privacy Settings</h1>
+                <p>Control how others see and interact with you on BrewNet</p>
+            </div>
+            
+            <div class="privacy-card">
+                <h2><i class="fas fa-eye"></i> Profile Visibility</h2>
+                
+                <div class="privacy-option">
+                    <div class="option-info">
+                        <h3>Discoverability</h3>
+                        <p>Allow your profile to appear in discovery results</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="privacy-option">
+                    <div class="option-info">
+                        <h3>Show Profile in Searches</h3>
+                        <p>Allow your profile to appear when others search for your interests</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="privacy-card">
+                <h2><i class="fas fa-map-marked-alt"></i> Location Settings</h2>
+                
+                <div class="privacy-option">
+                    <div class="option-info">
+                        <h3>Discovery Radius</h3>
+                        <p>Set how far away users can discover you (in kilometers)</p>
+                        <div class="range-container">
+                            <input type="range" min="1" max="20" value="5">
+                            <span class="range-value">5 km</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="privacy-option">
+                    <div class="option-info">
+                        <h3>Show Exact Distance</h3>
+                        <p>Allow others to see how far away you are</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="privacy-card">
+                <h2><i class="fas fa-user-secret"></i> Privacy Options</h2>
+                
+                <div class="privacy-option">
+                    <div class="option-info">
+                        <h3>Browse Anonymously</h3>
+                        <p>Your name won't be shown until you accept a connection request</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="privacy-option">
+                    <div class="option-info">
+                        <h3>Connection Approvals</h3>
+                        <p>Require your approval before anyone can message you</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="privacy-actions">
+                <button class="btn btn-primary">Save Changes</button>
+                <button class="btn btn-outline">Reset to Default</button>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update range value display
+            const rangeSlider = document.querySelector('input[type="range"]');
+            const rangeValue = document.querySelector('.range-value');
+            
+            rangeSlider.addEventListener('input', function() {
+rangeValue.textContent = this.value + ' km';
+            });
+            
+            // Save button animation
+            const saveBtn = document.querySelector('.btn-primary');
+            saveBtn.addEventListener('click', function() {
+                this.textContent = 'Saved!';
+                setTimeout(() => {
+                    this.textContent = 'Save Changes';
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BrewNet - Connect Locally</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <style>
+        /* Dark Blue/Black Color Scheme */
+        :root {
+            --primary: #1a237e;
+            --primary-dark: #0d1440;
+            --primary-light: #534bae;
+            --accent: #00bcd4;
+            --text-light: #e0e0e0;
+            --text-dark: #212121;
+            --bg-dark: #121212;
+            --card-bg: #1e1e2d;
+            --card-hover: #2a2a3a;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--card-bg);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .logo span:first-child {
+            color: var(--accent);
+        }
+
+        .logo span:last-child {
+            color: var(--text-light);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--accent);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        /* Hero Section - Modified for full video visibility */
+        .hero {
+            padding: 180px 0 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+
+        .video-background video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Dark overlay with reduced opacity for better video visibility */
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(13, 20, 64, 0.3); /* Lighter overlay */
+            z-index: 1;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-light);
+            line-height: 1.2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            color: var(--text-light);
+            opacity: 0.9;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.8rem 1.8rem;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent) 0%, #008ba3 100%);
+            color: var(--text-dark);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(0, 188, 212, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-outline:hover {
+            background: rgba(0, 188, 212, 0.1);
+            color: var(--text-light);
+            border-color: var(--text-light);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        /* Connection Counter */
+        .connection-counter {
+            background: rgba(30, 30, 45, 0.7);
+            backdrop-filter: blur(5px);
+            display: inline-flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            gap: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .counter-number {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent);
+            animation: pulse 2s infinite;
+        }
+
+        .counter-label {
+            text-align: left;
+        }
+
+        .counter-label p {
+            margin: 0;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Background Circles */
+        .bg-circles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .circle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(0, 188, 212, 0.05);
+            animation: float 15s infinite ease-in-out;
+        }
+
+        .site-footer {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 3rem 0 1.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-logo {
+            margin-bottom: 1rem;
+        }
+        
+        .footer-logo span:first-child {
+            color: #4a6bff;
+            font-weight: bold;
+        }
+        
+        .footer-logo span:last-child {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        
+        .footer-about p {
+            color: #bdc3c7;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-heading {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-heading::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 40px;
+            height: 2px;
+            background: #4a6bff;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .footer-links a:hover {
+            color: #4a6bff;
+            transform: translateX(5px);
+        }
+        
+        .footer-social {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .footer-social a {
+            color: white;
+            background: rgba(255,255,255,0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-social a:hover {
+            background: #4a6bff;
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            color: #bdc3c7;
+            font-size: 0.85rem;
+        }
+        
+        @media (max-width: 768px) {
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+            }
+            
+            .footer-heading {
+                margin-bottom: 1rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span>Brew</span><span>Net</span>
+                </div>
+                
+                <nav>
+                    <ul>
+                        <li><a href="./index.html" class="active"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="./discover.html"><i class="fas fa-map-marker-alt"></i> Discover</a></li>
+                        <li><a href="./connections.html"><i class="fas fa-users"></i> Connections</a></li>
+                        <li><a href="./profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="./privacy.html"><i class="fas fa-lock"></i> Privacy</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="auth-buttons">
+                    <button class="btn btn-outline">Log In</button>
+                    <button class="btn btn-primary">Sign Up</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="video-background">
+            <video autoplay muted loop playsinline>
+                <source src="./700_F_989145075_cQnpwgPiHZFFs8jXsfeXR5Y6PmHoyHzL_ST.mp4" type="video/mp4">
+                <img src="https://images.unsplash.com/photo-1581013451856-5cf8009621ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Map connection fallback">
+            </video>
+            <div class="video-overlay"></div>
+        </div>
+        
+        <div class="bg-circles">
+            <div class="circle" style="width: 300px; height: 300px; left: 10%; animation-duration: 20s;"></div>
+            <div class="circle" style="width: 200px; height: 200px; left: 30%; animation-duration: 15s; animation-delay: 2s;"></div>
+            <div class="circle" style="width: 250px; height: 250px; left: 70%; animation-duration: 18s; animation-delay: 4s;"></div>
+        </div>
+        
+        <div class="container">
+            <div class="hero-content">
+                <h1>Connect With Like-Minded People</h1>
+                <p>BrewNet helps you find and connect with like-minded people in your area through real-time location-based matching.</p>
+                
+                <div class="cta-buttons">
+                    <button class="btn btn-primary cta-primary">Get Started - It's Free</button>
+                    <button class="btn btn-outline cta-secondary">Learn More</button>
+                </div>
+                
+                <div class="connection-counter">
+                    <div class="counter-number">1,247</div>
+                    <div class="counter-label"><p>connections made today</p></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="site-footer">
+        <div class="footer-container">
+            <div class="footer-about">
+                <div class="footer-logo">
+                    <span>Brew</span><span>Net</span>
+                </div>
+                <p>Connecting like-minded people locally through shared interests and real-time location-based matching.</p>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-links-group">
+                <h3 class="footer-heading">Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="./index.html"><i class="fas fa-chevron-right"></i> Home</a></li>
+                    <li><a href="./discover.html"><i class="fas fa-chevron-right"></i> Discover</a></li>
+                    <li><a href="./connections.html"><i class="fas fa-chevron-right"></i> Connections</a></li>
+                    <li><a href="./profile.html"><i class="fas fa-chevron-right"></i> Profile</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links-group">
+                <h3 class="footer-heading">Company</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Careers</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-links-group">
+                <h3 class="footer-heading">Support</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Help Center</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Safety</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Community</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2025 BrewNet. All rights reserved. | <a href="#" style="color:#bdc3c7;">Privacy Policy</a> | <a href="#" style="color:#bdc3c7;">Terms of Service</a></p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add dynamic circles
+            const bgCircles = document.querySelector('.bg-circles');
+            for (let i = 0; i < 5; i++) {
+                const circle = document.createElement('div');
+                circle.className = 'circle';
+                circle.style.width = `${Math.random() * 200 + 100}px`;
+                circle.style.height = circle.style.width;
+                circle.style.left = `${Math.random() * 100}%`;
+                circle.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                circle.style.animationDelay = `${Math.random() * 5}s`;
+                circle.style.opacity = Math.random() * 0.2 + 0.1;
+                bgCircles.appendChild(circle);
+            }
+            
+            // Animate connection counter
+            const counter = document.querySelector('.counter-number');
+            if (counter) {
+                let count = 0;
+                const target = parseInt(counter.textContent.replace(/,/g, ''));
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                
+                const updateCount = () => {
+                    count += increment;
+                    if (count < target) {
+                        counter.textContent = Math.floor(count).toLocaleString();
+                        requestAnimationFrame(updateCount);
+                    } else {
+                        counter.textContent = target.toLocaleString();
+                    }
+                };
+                
+                setTimeout(() => {
+                    requestAnimationFrame(updateCount);
+                }, 1500);
+            }
+            
+            // Button hover effects
+            const buttons = document.querySelectorAll('.btn');
+            buttons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px)';
+                    if (this.classList.contains('btn-primary')) {
+                        this.style.boxShadow = '0 5px 15px rgba(0, 188, 212, 0.3)';
+                    }
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discover - BrewNet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #4BB543;
+            --bg-dark: #0a1128; /* Blackish-blue background */
+            --card-bg: #1a2035; /* Darker blue for cards */
+            --text-light: #e2e6f0; /* Light text for dark background */
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header styles */
+        header {
+            background: var(--card-bg);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo span:first-child {
+            color: var(--primary);
+        }
+        
+        .logo span:last-child {
+            color: var(--text-light);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 25px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary-light);
+        }
+        
+        nav ul li a.active {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+        
+        .auth-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        /* Main content */
+        .discover-container {
+            padding: 150px 0 50px;
+        }
+        
+        .discover-header {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+        
+        .discover-header h1 {
+            color: var(--primary-light);
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+        }
+        
+        .filter-control {
+            margin-bottom: 20px;
+        }
+        
+        .filter-control label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+        
+        .range-slider {
+            width: 100%;
+            margin: 15px 0;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            outline: none;
+        }
+        
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .range-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 0 5px rgba(67, 97, 238, 0.2);
+        }
+        
+        .interest-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .interest-tag {
+            padding: 8px 15px;
+            background: rgba(67, 97, 238, 0.2);
+            color: var(--primary-light);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .interest-tag:hover, .interest-tag.active {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .people-list {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .people-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .people-list-header h3 {
+            color: var(--text-light);
+            font-size: 1.3rem;
+        }
+        
+        .sort-options select {
+            padding: 8px 15px;
+            border-radius: 5px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--card-bg);
+            color: var(--text-light);
+        }
+        
+        .person-card {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            transition: all 0.3s;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .person-card:hover {
+            background: rgba(67, 97, 238, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .person-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .person-info {
+            flex-grow: 1;
+        }
+        
+        .person-info h4 {
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+        
+        .person-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+        
+        .person-distance {
+            color: var(--primary-light);
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .discover-container {
+                padding: 120px 0 30px;
+            }
+            
+            .person-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .person-avatar {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span>Brew</span><span>Net</span>
+                </div>
+                
+                <nav>
+                    <ul>
+                        <li><a href="./index.html" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="./discover.html" class="nav-link active"><i class="fas fa-map-marker-alt"></i> Discover</a></li>
+                        <li><a href="./connections.html" class="nav-link"><i class="fas fa-users"></i> Connections</a></li>
+                        <li><a href="./profile.html" class="nav-link"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="./privacy.html" class="nav-link"><i class="fas fa-lock"></i> Privacy</a></li>
+                    </ul>
+                </nav>
+                
+                <div class="auth-buttons"></div>
+            </div>
+        </div>
+    </header>
+    
+    <main class="discover-container">
+        <div class="container">
+            <div class="discover-header">
+                <h1>Discover People Nearby</h1>
+                
+                <div class="filter-control">
+                    <label for="radius-slider">Search Radius: <span id="radius-value">5</span> km</label>
+                    <input type="range" class="range-slider" id="radius-slider" min="1" max="20" value="5">
+                </div>
+                
+                <div class="filter-control">
+                    <label>Filter by Interests:</label>
+                    <div class="interest-tags">
+                        <span class="interest-tag">Technology</span>
+                        <span class="interest-tag">Photography</span>
+                        <span class="interest-tag">Music</span>
+                        <span class="interest-tag">Sports</span>
+                        <span class="interest-tag">Travel</span>
+                        <span class="interest-tag">Food</span>
+                        <span class="interest-tag">Art</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="people-list">
+                <div class="people-list-header">
+                    <h3>People Nearby <span>(12)</span></h3>
+                    <div class="sort-options">
+                        <select>
+                            <option>Distance</option>
+                            <option>Common Interests</option>
+                            <option>Recently Active</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="person-card">
+                    <div class="person-avatar">AJ</div>
+                    <div class="person-info">
+                        <h4>Alex Johnson</h4>
+                        <p>Tech Enthusiast • Photography</p>
+                    </div>
+                    <div class="person-distance">0.8 km</div>
+                </div>
+                
+                <div class="person-card">
+                    <div class="person-avatar">SM</div>
+                    <div class="person-info">
+                        <h4>Sarah Miller</h4>
+                        <p>Photographer • Travel</p>
+                    </div>
+                    <div class="person-distance">1.2 km</div>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update radius value display
+            const radiusSlider = document.getElementById('radius-slider');
+            const radiusValue = document.getElementById('radius-value');
+            
+            radiusSlider.addEventListener('input', function() {
+                radiusValue.textContent = this.value;
+            });
+            
+            // Interest tag selection
+            const interestTags = document.querySelectorAll('.interest-tag');
+            interestTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    this.classList.toggle('active');
+                });
+            });
+            
+            // Person card click handler
+            const personCards = document.querySelectorAll('.person-card');
+            personCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    console.log('Viewing profile:', this.querySelector('h4').textContent);
+                });
+            });
+            
+            // Navigation fix
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (!this.classList.contains('active')) {
+                        e.preventDefault();
+                        const href = this.getAttribute('href');
+                        setTimeout(() => {
+                            window.location.href = href;
+                        }, 100);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

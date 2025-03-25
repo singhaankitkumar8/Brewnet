@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connections - BrewNet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #4BB543;
+            --bg-dark: #0a1128; /* Blackish-blue background */
+            --card-bg: #1a2035; /* Darker blue for cards */
+            --text-light: #e2e6f0; /* Light text for dark background */
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Header styles */
+        header {
+            background: var(--card-bg);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .logo span:first-child {
+            color: var(--primary);
+        }
+        
+        .logo span:last-child {
+            color: var(--text-light);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 25px;
+        }
+        
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-light);
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        nav ul li a:hover {
+            color: var(--primary-light);
+        }
+        
+        nav ul li a.active {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+        
+        /* Main Content */
+        .connections-container {
+            padding: 180px 0 50px;
+        }
+        
+        .connections-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .connections-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-light);
+            margin-bottom: 10px;
+        }
+        
+        .connections-header p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+        
+        /* Tabs */
+        .connections-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .tab-btn {
+            padding: 12px 25px;
+            background: none;
+            border: none;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--gray);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s;
+        }
+        
+        .tab-btn.active {
+            color: var(--primary-light);
+        }
+        
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-light);
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* Request Card */
+        .request-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+        
+        .request-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.2);
+        }
+        
+        .request-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            margin-right: 20px;
+            flex-shrink: 0;
+        }
+        
+        .request-info {
+            flex-grow: 1;
+        }
+        
+        .request-info h3 {
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+        
+        .request-meta {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+        }
+        
+        .request-interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .interest-tag {
+            background: rgba(67, 97, 238, 0.2);
+            color: var(--primary-light);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        
+        .request-actions {
+            display: flex;
+            gap: 10px;
+            margin-left: 20px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-light);
+            border: 1px solid var(--primary-light);
+        }
+        
+        .btn-outline:hover {
+            background: rgba(67, 97, 238, 0.1);
+        }
+        
+        /* Meetup Card */
+        .meetup-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        .meetup-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(67, 97, 238, 0.2);
+        }
+        
+        .meetup-image {
+            height: 150px;
+            background: rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+        }
+        
+        .meetup-details {
+            padding: 20px;
+        }
+        
+        .meetup-details h3 {
+            color: var(--text-light);
+            margin-bottom: 15px;
+        }
+        
+        .meetup-meta {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        
+        .meetup-meta i {
+            margin-right: 5px;
+            width: 16px;
+            text-align: center;
+        }
+        
+        .meetup-attendees {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .attendee-avatars {
+            display: flex;
+        }
+        
+        .attendee-avatars img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid var(--card-bg);
+            margin-right: -10px;
+        }
+        
+        .more-attendees {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        /* New Meetup Section */
+        .new-meetup {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-top: 30px;
+        }
+        
+        .new-meetup h2 {
+            color: var(--primary-light);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-light);
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-family: inherit;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-light);
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .connections-container {
+                padding: 140px 0 30px;
+            }
+            
+            .request-card {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .request-avatar {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            
+            .request-actions {
+                margin-left: 0;
+                margin-top: 15px;
+                justify-content: center;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            nav ul li {
+                margin-left: 15px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0 10px 5px;
+            }
+            
+            .connections-container {
+                padding: 180px 0 30px;
+            }
+            
+            .connections-tabs {
+                flex-direction: column;
+            }
+            
+            .tab-btn {
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .tab-btn.active::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span>Brew</span><span>Net</span>
+                </div>
+                
+                <nav>
+                    <ul>
+                        <li><a href="./index.html"><i class="fas fa-home"></i> Home</a></li>
+                        <li><a href="./discover.html"><i class="fas fa-map-marker-alt"></i> Discover</a></li>
+                        <li><a href="./connections.html" class="active"><i class="fas fa-users"></i> Connections</a></li>
+                        <li><a href="./profile.html"><i class="fas fa-user"></i> Profile</a></li>
+                        <li><a href="./privacy.html"><i class="fas fa-lock"></i> Privacy</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <main class="connections-container">
+        <div class="container">
+            <div class="connections-header">
+                <h1>Your Connections</h1>
+                <p>Manage your network and stay connected with people who share your interests</p>
+                
+                <div class="connections-tabs">
+                    <button class="tab-btn active" data-tab="pending-requests">Pending Requests</button>
+                    <button class="tab-btn" data-tab="upcoming-meetups">Upcoming Meetups</button>
+                </div>
+            </div>
+            
+            <!-- Pending Requests Tab -->
+            <div class="tab-content active" id="pending-requests">
+                <div class="request-card">
+                    <div class="request-avatar">SM</div>
+                    <div class="request-info">
+                        <h3>Sarah Miller</h3>
+                        <p class="request-meta">4 common interests • 1.2 km away</p>
+                        <div class="request-interests">
+                            <span class="interest-tag">Photography</span>
+                            <span class="interest-tag">Hiking</span>
+                        </div>
+                    </div>
+                    <div class="request-actions">
+                        <button class="btn btn-primary accept-request">Accept</button>
+                        <button class="btn btn-outline decline-request">Decline</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Upcoming Meetups Tab -->
+            <div class="tab-content" id="upcoming-meetups">
+                <div class="meetup-card">
+                    <div class="meetup-image">
+                        <i class="fas fa-users fa-3x" style="color: var(--gray);"></i>
+                    </div>
+                    <div class="meetup-details">
+                        <h3>Tech Enthusiasts Meetup</h3>
+                        <p class="meetup-meta">
+                            <i class="fas fa-map-marker-alt"></i> Downtown Coffee Shop<br>
+                            <i class="fas fa-calendar-alt"></i> June 15, 2023 • 6:00 PM
+                        </p>
+                        <div class="meetup-attendees">
+                            <div class="attendee-avatars">
+                                <div class="request-avatar" style="width: 30px; height: 30px; font-size: 0.9rem;">A</div>
+                                <div class="request-avatar" style="width: 30px; height: 30px; font-size: 0.9rem;">S</div>
+                                <div class="request-avatar" style="width: 30px; height: 30px; font-size: 0.9rem;">M</div>
+                                <span class="more-attendees">+5</span>
+                            </div>
+                            <button class="btn btn-outline">View Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Plan New Meetup Section -->
+            <div class="new-meetup">
+                <h2><i class="fas fa-plus-circle"></i> Plan a New Meetup</h2>
+                <form>
+                    <div class="form-group">
+                        <label for="meetup-title">Title</label>
+                        <input type="text" id="meetup-title" placeholder="e.g., Coffee & Tech Talk">
+                    </div>
+                    <div class="form-group">
+                        <label for="meetup-description">Description</label>
+                        <textarea id="meetup-description" placeholder="What's this meetup about?"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="meetup-location">Location</label>
+                        <input type="text" id="meetup-location" placeholder="Enter a location">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="meetup-date">Date</label>
+                            <input type="date" id="meetup-date">
+                        </div>
+                        <div class="form-group">
+                            <label for="meetup-time">Time</label>
+                            <input type="time" id="meetup-time">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px;">Create Meetup</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching functionality
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove active class from all buttons and contents
+                    tabBtns.forEach(tab => tab.classList.remove('active'));
